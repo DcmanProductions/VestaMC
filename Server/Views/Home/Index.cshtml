@@ -1,0 +1,80 @@
+﻿@using Core.Controllers;
+@using Core.Models;
+@using Core;
+<link rel="stylesheet" href="/css//dashboard.css">
+<div class="col">
+    <h1 id="welcome-header"><span>Welcome, </span><span class="content">Drew</span></h1>
+    <div id="dashboard-content" class="row">
+        <div id="instances" class="col">
+            <div class="row">
+                <h4>Instances</h4>
+                <div id="instances-actions" class="row">
+                    <i id="filter-instances" class="fa-solid fa-arrow-down-wide-short filter"></i>
+                    <a class="button secondary" href="@Url.Action("CreateInstance", "Home")"><i class="fa fa-plus"></i></a>
+                </div>
+            </div>
+            <div class="panel">
+                <div id="instance-items" class="col">
+                    @foreach(InstanceModel instance in InstanceController.Get())
+                    {
+                    <a class="item row" title="View @instance.Name" href="@Url.Action("Instance", "Home", instance.Id)">
+                        <div class="col status @(instance.State==InstanceState.RUNNING?"success":instance.State == InstanceState.OFFLINE ? "error" : "warn")"></div>
+                        <div class="col information">
+                            <div class="status">@instance.Name</div>
+                            <div class="extra">@(instance.State==InstanceState.RUNNING?"online":instance.State == InstanceState.OFFLINE ? "offline" : "needs assistance")</div>
+                        </div>
+                        <div class="col actionbar">
+                            <div class="button secondary"><i class="fa fa-chevron-right"></i></div>
+                        </div>
+                    </a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div id="activity" class="col">
+            <div class="row">
+                <h4>Activity</h4>
+                <i id="filter-activity" class="fa-solid fa-arrow-down-wide-short filter"></i>
+            </div>
+            <div id="activity-items" class="col">
+                @foreach(ActivityModel activity in InstanceController.GetActivity())
+                {
+                    <div class="item row">
+                        @switch (activity.Type)
+                        {
+                            case ActivityType.STARTED:
+                            case ActivityType.CREATE:
+                                <div class="col status success"></div>
+                                break;
+                            case ActivityType.CAUTION:
+                                <div class="col status warn"></div>
+                                break;
+                            case ActivityType.KILLED:
+                            case ActivityType.STOPPED:
+                            case ActivityType.DELETE:
+                                <div class="col status error"></div>
+                                break;
+                            default:
+                                <div class="col status"></div>
+                                break;
+                        }
+                    <div class="col information">
+                        <div class="status">Server @activity.Type.ToString()</div>
+                            @if (activity.Instance.HasValue)
+                            {
+                                <div class="extra"><span class="name">@activity.Instance.Value.Name</span> - @activity.Details</div>
+                            }
+                            else
+                            {
+                                <div class="extra">@activity.Details</div>
+                            }
+                        </div>
+                    <div class="col">
+                        <div class="button secondary"><i class="fa fa-chevron-right"></i></div>
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

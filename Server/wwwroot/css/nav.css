@@ -1,0 +1,63 @@
+﻿/* LFInteractive LLC. - All Rights Reserved */
+nav {
+    position: fixed;
+    width: 350px;
+    height: 100%;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+#brand {
+    font-size: 1.57rem;
+    width: 100%;
+    margin: 1rem 3rem;
+    font-weight: 600;
+    line-height: 2.375rem;
+}
+
+#nav-items {
+    margin-top: 10rem;
+}
+
+.nav-item {
+    width: 75%;
+    font-size: 1.03rem;
+    margin: 8px auto;
+    padding: 1.5rem 1rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: .5;
+    font-weight: 600;
+    transition: filter, background, opacity;
+    transition-duration: 200ms;
+}
+
+    .nav-item i {
+        margin-left: 20px;
+        margin-right: 22px;
+    }
+
+
+    .nav-item:hover {
+        filter: brightness(1.3)
+    }
+
+    .nav-item:hover, .nav-item.selected {
+        background-color: #3B3170;
+        opacity: 1;
+    }
+
+nav::before {
+    content: '';
+    position: absolute;
+    width: 298px;
+    height: 370px;
+    left: 200px;
+    top: 200px;
+    background: linear-gradient(180deg, rgba(175, 25, 142, 0.5) 0%, rgba(49, 59, 148, 0.5) 100%);
+    filter: blur(119px);
+    border-radius: 250px;
+    transform: rotate(180deg);
+    z-index: -1;
+}

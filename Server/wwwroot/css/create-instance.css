@@ -1,0 +1,18 @@
+﻿#create-instance .panel {
+    width: calc(100% - 8rem);
+    height: 65vh;
+    min-height: 500px;
+}
+
+#create-instance #form-data {
+    height: 100%;
+}
+
+    #create-instance #form-data .col {
+        width: 100%;
+        margin: 0 2rem;
+    }
+
+    #create-instance #form-data input {
+        margin-bottom: 2rem;
+    }

@@ -1,0 +1,169 @@
+﻿
+h1#welcome-header span:not(.content) {
+    font-size: 3rem;
+    font-weight: 100;
+}
+
+h1#welcome-header span.content {
+    font-size: 3rem;
+    font-weight: 900;
+}
+
+#dashboard-content {
+    width: 100%;
+    height: 100%;
+}
+
+h4 {
+    font-size: 1.57rem;
+}
+
+.filter {
+    cursor: pointer;
+    opacity: .7;
+    font-size: 1.25rem;
+}
+
+    .filter:hover {
+        opacity: 1
+    }
+
+#instances {
+    width: 65%;
+    height: 100%;
+}
+
+    #instances #instances-actions {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+        width: 100%;
+    }
+
+        #instances #instances-actions > * {
+            margin-left: 1rem;
+        }
+
+        #instances #instances-actions .button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 1rem;
+            padding: 1rem;
+            aspect-ratio: 1;
+        }
+
+    #instances .panel {
+        height: 100%;
+        min-height: 500px;
+    }
+
+#activity {
+    margin: 0;
+    margin-left: auto;
+    margin-right: 2rem;
+    width: 30%;
+    min-width: 200px;
+    height: 100%;
+    overflow: hidden;
+}
+
+    #activity #activity-items, #instances .panel {
+        padding-right: 1rem;
+        max-height: 75vh;
+        min-height: 500px;
+        overflow-y: scroll;
+    }
+
+    #activity .row {
+        display: flex;
+        align-items: center;
+        width: 100%;
+    }
+
+        #activity .row h4 {
+            width: 100%;
+        }
+
+#instances .item {
+    background: transparent;
+    padding: 1rem;
+    margin: 5px auto;
+}
+
+    #instances .item:hover {
+        background: #232642;
+    }
+
+
+.item {
+    color: #9296C0;
+    padding: 2rem;
+    height: 3rem;
+    background: #1A1D33;
+    border-radius: 20px;
+    margin: 5px 0;
+    width: calc(100% - 4rem) !important;
+    cursor: pointer;
+}
+
+    .item .actionbar {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        margin: 0;
+    }
+
+    .item > div {
+        margin: .5rem;
+    }
+
+    .item > .status {
+        border-radius: 100px;
+        aspect-ratio: 1;
+        width: 2.7rem;
+        background: #ccc;
+    }
+
+    .item .button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        aspect-ratio: 1;
+        width: 1rem;
+        height: 1rem;
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .item > .status.error {
+        background: #CC3333;
+    }
+
+    .item > .status.warn {
+        background: #CCAA33;
+    }
+
+    .item > .status.success {
+        background: #33CC70;
+    }
+
+    .item .information {
+        width: 100%;
+    }
+
+        .item .information .status {
+            font-weight: 900;
+            font-size: 1.57rem;
+            line-height: 2rem;
+        }
+
+
+        .item .information .extra {
+            font-size: .85rem;
+        }
+
+            .item .information .extra .name {
+                font-weight: 900;
+            }

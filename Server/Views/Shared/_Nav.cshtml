@@ -1,0 +1,24 @@
+﻿<link rel="stylesheet" href="css/nav.css">
+
+<nav>
+    <h4 id="brand">web deploy <img src="img/bars.svg" /></h4>
+   <div id="nav-items" class="col">
+
+       <a class="nav-item @((int)ViewData["nav-page"] == 0?"selected":"")" href="@Url.Action("Index", "Home")">
+           <i class="fa-solid fa-home"></i>
+           dashboard
+       </a>
+       <a class="nav-item @((int)ViewData["nav-page"] == 1?"selected":"")" href="@Url.Action("Instance", "Home")">
+           <i class="fa-solid fa-layer-group"></i>
+           instances
+       </a>
+       <a class="nav-item @((int)ViewData["nav-page"] == 2?"selected":"")" href="@Url.Action("Marketplace", "Home")">
+           <i class="fa-solid fa-store"></i>
+           marketplace
+       </a>
+       <a class="nav-item @((int)ViewData["nav-page"] == 3?"selected":"")" href="@Url.Action("Settings", "Home")">
+           <i class="fa-solid fa-gear"></i>
+           settings
+       </a>
+   </div>
+</nav>

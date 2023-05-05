@@ -1,0 +1,82 @@
+﻿/* LFInteractive LLC. - All Rights Reserved */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+body {
+    background: #141627;
+    color: white;
+    font-family: "poppins";
+    inset: 0;
+    margin: 0;
+}
+
+main {
+    margin-left: 400px;
+    overflow: hidden;
+}
+
+    main::before {
+        content: '';
+        position: absolute;
+        width: 732px;
+        height: 656px;
+        right: 20px;
+        top: 20px;
+        background: linear-gradient(228.67deg, rgba(43, 147, 244, 0.5) 2.71%, rgba(107, 43, 244, 0.5) 83.44%);
+        filter: blur(250px);
+        border-radius: 250px;
+        transform: rotate(180deg);
+        z-index: -1;
+    }
+
+
+.col, .row, .center {
+    display: flex;
+}
+
+.col {
+    flex-direction: column;
+}
+
+.row {
+    flex-direction: row;
+}
+
+.center {
+    margin: auto;
+}
+
+    .center .horizontal {
+        margin: unset auto;
+    }
+
+    .center .vertical {
+        margin: auto unset;
+    }
+
+
+.panel {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    min-height: 200px;
+    min-width: 300px;
+    width: calc(100% - 4rem);
+    height: calc(100% - 4rem);
+    padding: 2rem;
+    background: #1A1D33;
+    isolation: isolate;
+}
+
+    .panel::before {
+        content: '';
+        position: absolute;
+        width: 441px;
+        height: 455px;
+        right: -20px;
+        top: -20px;
+        background: linear-gradient(56.68deg, rgba(163, 175, 25, 0.5) 10.99%, rgba(212, 13, 192, 0.5) 93.45%);
+        filter: blur(119px);
+        border-radius: 250px;
+        transform: rotate(180deg);
+        z-index: -1;
+    }
