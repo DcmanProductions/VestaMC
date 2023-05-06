@@ -1,10 +1,10 @@
 // LFInteractive LLC. - All Rights Reserved
-using Core;
-using Core.Controllers;
+using Chase.WebDeploy.Core;
+using Chase.WebDeploy.Core.Controllers;
 using Serilog;
 using Serilog.Events;
 
-namespace Server;
+namespace Chase.WebDeploy.Server;
 
 public static class Application
 {
@@ -38,11 +38,14 @@ internal class Startup
 {
     public void Configure(IApplicationBuilder app, IWebHostEnvironment evn)
     {
+
+
         app.UseForwardedHeaders();
-        app.UseMvc();
-        app.UseRouting();
         app.UseStaticFiles();
         app.UseDefaultFiles();
+        app.UseRouting();
+        app.UseSession();
+        app.UseMvc();
         app.UseSerilogRequestLogging();
     }
 
@@ -51,6 +54,11 @@ internal class Startup
         service.AddMvc(action =>
         {
             action.EnableEndpointRouting = false;
+        });
+        service.AddSession(action =>
+        {
+            action.IOTimeout = TimeSpan.FromSeconds(10);
+            action.IdleTimeout = TimeSpan.FromSeconds(10);
         });
     }
 }
