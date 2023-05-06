@@ -8,12 +8,19 @@ nav {
 }
 
 #brand {
+    position: relative;
     font-size: 1.57rem;
-    width: 100%;
+    width: calc(100% - 3rem);
     margin: 1rem 3rem;
     font-weight: 600;
     line-height: 2.375rem;
 }
+
+    #brand img {
+        position: absolute;
+        right: 1rem;
+        top: .5rem;
+    }
 
 #nav-items {
     margin-top: 10rem;
@@ -25,7 +32,7 @@ nav {
     margin: 8px auto;
     padding: 1.5rem 1rem;
     border-radius: 20px;
-    text-transform: uppercase;
+    text-transform: lowercase;
     cursor: pointer;
     opacity: .5;
     font-weight: 600;
