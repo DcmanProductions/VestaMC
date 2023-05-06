@@ -1,13 +1,14 @@
-﻿@using Core.Controllers;
-@using Core.Models;
-@using Core;
+﻿@using Chase.WebDeploy.Core.Controllers;
+@using Chase.WebDeploy.Core.Models;
+@using Chase.WebDeploy.Core;
+@using Chase.WebDeploy.Core.Types;
 <link rel="stylesheet" href="/css//dashboard.css">
 <div class="col">
-    <h1 id="welcome-header"><span>Welcome, </span><span class="content">Drew</span></h1>
+    <h1 id="welcome-header"><span>welcome, </span><span class="content">drew</span></h1>
     <div id="dashboard-content" class="row">
         <div id="instances" class="col">
             <div class="row">
-                <h4>Instances</h4>
+                <h4>instances</h4>
                 <div id="instances-actions" class="row">
                     <i id="filter-instances" class="fa-solid fa-arrow-down-wide-short filter"></i>
                     <a class="button secondary" href="@Url.Action("CreateInstance", "Home")"><i class="fa fa-plus"></i></a>
@@ -33,7 +34,7 @@
         </div>
         <div id="activity" class="col">
             <div class="row">
-                <h4>Activity</h4>
+                <h4>activity</h4>
                 <i id="filter-activity" class="fa-solid fa-arrow-down-wide-short filter"></i>
             </div>
             <div id="activity-items" class="col">
