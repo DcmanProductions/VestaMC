@@ -1,5 +1,6 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-namespace Core;
+
+namespace Chase.WebDeploy.Core.Types;
 
 public enum InstanceState
 {
