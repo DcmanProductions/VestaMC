@@ -1,8 +1,8 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-using Core.Controllers;
+using Chase.WebDeploy.Core.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Server.Controllers.frontend;
+namespace Chase.WebDeploy.Server.Controllers.frontend;
 
 [Route("/instances")]
 public class InstancesController : Controller
@@ -11,7 +11,7 @@ public class InstancesController : Controller
     {
         ViewData["title"] = "Instance";
         ViewData["nav-page"] = 1;
-        if (Guid.TryParse(HttpContext.Session.GetString("selected-instance"), out Guid id))
+        if (Guid.TryParse(HttpContext.Session.GetString("selected-instance"), out Guid id) && InstanceController.Exists(id))
         {
             return View(InstanceController.Get(id));
         }

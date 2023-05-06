@@ -1,5 +1,5 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-namespace Core.Models;
+namespace Chase.WebDeploy.Core.Models;
 
 public struct SettingsModel
 {

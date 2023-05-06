@@ -1,5 +1,7 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-namespace Core.Models;
+using Chase.WebDeploy.Core.Types;
+
+namespace Chase.WebDeploy.Core.Models;
 
 public struct ActivityModel
 {

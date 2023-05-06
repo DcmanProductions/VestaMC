@@ -1,7 +1,7 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
 using Microsoft.AspNetCore.Mvc;
 
-namespace Server.Controllers.frontend;
+namespace Chase.WebDeploy.Server.Controllers.frontend;
 
 [Route("/error")]
 public class ErrorController : Controller

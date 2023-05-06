@@ -1,9 +1,10 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-using Core.Models;
+using Chase.WebDeploy.Core.Models;
+using Chase.WebDeploy.Core.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Core.Controllers;
+namespace Chase.WebDeploy.Core.Controllers;
 
 public class InstanceController
 {
