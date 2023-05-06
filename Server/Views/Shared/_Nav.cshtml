@@ -1,22 +1,22 @@
-﻿<link rel="stylesheet" href="css/nav.css">
+﻿<link rel="stylesheet" href="/css/nav.css">
 
 <nav>
-    <h4 id="brand">web deploy <img src="img/bars.svg" /></h4>
+    <h4 id="brand">@Html.ActionLink("web deploy", "Index", "Home") <img src="/img/bars.svg" /></h4>
    <div id="nav-items" class="col">
 
        <a class="nav-item @((int)ViewData["nav-page"] == 0?"selected":"")" href="@Url.Action("Index", "Home")">
            <i class="fa-solid fa-home"></i>
            dashboard
        </a>
-       <a class="nav-item @((int)ViewData["nav-page"] == 1?"selected":"")" href="@Url.Action("Instance", "Home")">
+       <a class="nav-item @((int)ViewData["nav-page"] == 1?"selected":"")" href="@Url.Action("Index", "Instances")">
            <i class="fa-solid fa-layer-group"></i>
            instances
        </a>
-       <a class="nav-item @((int)ViewData["nav-page"] == 2?"selected":"")" href="@Url.Action("Marketplace", "Home")">
+       <a class="nav-item @((int)ViewData["nav-page"] == 2?"selected":"")" href="@Url.Action("Index", "Marketplace")">
            <i class="fa-solid fa-store"></i>
            marketplace
        </a>
-       <a class="nav-item @((int)ViewData["nav-page"] == 3?"selected":"")" href="@Url.Action("Settings", "Home")">
+       <a class="nav-item @((int)ViewData["nav-page"] == 3?"selected":"")" href="@Url.Action("Index", "Settings")">
            <i class="fa-solid fa-gear"></i>
            settings
        </a>
