@@ -1,14 +1,20 @@
 ﻿(() => {
     async function login(username, password) {
-        let response = await $.post("/api/authentication/login", {
-            username=username,
-            password=password
-        });
-        if (response.error) {
-            $("p.error").html(response.error)
-        } else {
-            document.cookie = `access-token=${response.token};expires=${new Date(3000).toUTCString()};path=/`;
-        }
+        $.ajax({
+            type: "POST",
+            url: "/api/authentication/login",
+            data: {
+                username: username,
+                password: password
+            },
+            error: e => {
+                $("p.error").html(e.responseJSON.error)
+            },
+            success: e => {
+                document.cookie = `access-token=${e.token};expires=${new Date(3000, 0, 1).toUTCString()};path=/`;
+                window.location.href = "/";
+            }
+        })
     }
 
     $("#login-button").on("click", () => {
