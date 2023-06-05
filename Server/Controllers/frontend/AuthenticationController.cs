@@ -9,6 +9,10 @@ public class AuthenticationController : Controller
     [Route("login")]
     public IActionResult Login()
     {
+        if (IsLoggedIn(HttpContext))
+        {
+            return RedirectToAction("Index", "Home");
+        }
         ViewData["title"] = "Login";
         ViewData["hide-nav"] = true;
         return View();
