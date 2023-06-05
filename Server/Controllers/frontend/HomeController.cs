@@ -17,7 +17,7 @@ public class HomeController : Controller
     {
         if (!IsLoggedIn(HttpContext))
         {
-            RedirectToAction("Login", "Authentication");
+            return RedirectToAction("Login", "Authentication");
         }
 
         ViewData["title"] = "Dashboard";
