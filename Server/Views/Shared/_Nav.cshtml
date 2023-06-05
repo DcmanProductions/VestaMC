@@ -1,7 +1,7 @@
 ﻿<link rel="stylesheet" href="/css/nav.css">
 
 <nav>
-    <a id="brand" href="@Url.Action("Index", "Home")"><img src="/img/logo.svg" />spoke</a>
+    <a id="brand" href="@Url.Action("Index", "Home")"><img src="/img/logo.svg" />@Chase.Vesta.Core.Values.ApplicationName</a>
    <div id="nav-items" class="col">
 
        <a class="nav-item @((int)ViewData["nav-page"] == 0?"selected":"")" href="@Url.Action("Index", "Home")">
