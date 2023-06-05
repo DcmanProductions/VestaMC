@@ -16,7 +16,7 @@ public class InstancesController : Controller
 {
     public IActionResult Index()
     {
-        if (IsLoggedIn(HttpContext))
+        if (!IsLoggedIn(HttpContext))
         {
             return RedirectToAction("Login", "Authentication");
         }
@@ -32,7 +32,7 @@ public class InstancesController : Controller
     [Route("create")]
     public IActionResult Create()
     {
-        if (IsLoggedIn(HttpContext))
+        if (!IsLoggedIn(HttpContext))
         {
             return RedirectToAction("Login", "Authentication");
         }
