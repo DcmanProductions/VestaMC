@@ -81,3 +81,10 @@ main {
         transform: rotate(180deg);
         z-index: -1;
     }
+
+    p.error{
+        font-style: italic;
+        text-decoration: underline;
+        color: red;
+        font-weight: 800;
+    }
