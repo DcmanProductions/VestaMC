@@ -1,6 +1,6 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
 
-namespace Chase.WebDeploy.Core.Types;
+namespace Chase.Vesta.Core.Types;
 
 public enum ActivityType
 {

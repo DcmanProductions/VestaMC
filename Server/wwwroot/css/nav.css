@@ -13,13 +13,17 @@ nav {
     width: calc(100% - 3rem);
     margin: 1rem 3rem;
     font-weight: 600;
-    line-height: 2.375rem;
+    line-height: 4rem;
+    margin-left: 4rem;
+    margin-top: 2rem;
 }
 
     #brand img {
         position: absolute;
-        right: 1rem;
-        top: .5rem;
+        left: -3rem;
+        aspect-ratio: 1;
+        height: 3rem;
+        top: -.5rem;
     }
 
 #nav-items {

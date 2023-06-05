@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Chase.$(SolutionName.Replace(" ", "")).$(MSBuildProjectName.Replace(" ", ""))</RootNamespace>
+    <ApplicationIcon>logo.ico</ApplicationIcon>
+    <AssemblyName>$(SolutionName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,9 +24,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\api\" />
+    <Content Include="logo.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Views\Error\" />
-    <Folder Include="wwwroot\js\" />
     <Folder Include="wwwroot\img\" />
   </ItemGroup>
 

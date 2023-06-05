@@ -1,7 +1,7 @@
 ﻿<link rel="stylesheet" href="/css/nav.css">
 
 <nav>
-    <h4 id="brand">@Html.ActionLink("web deploy", "Index", "Home") <img src="/img/bars.svg" /></h4>
+    <a id="brand" href="@Url.Action("Index", "Home")"><img src="/img/logo.svg" />spoke</a>
    <div id="nav-items" class="col">
 
        <a class="nav-item @((int)ViewData["nav-page"] == 0?"selected":"")" href="@Url.Action("Index", "Home")">
@@ -12,9 +12,9 @@
            <i class="fa-solid fa-layer-group"></i>
            instances
        </a>
-       <a class="nav-item @((int)ViewData["nav-page"] == 2?"selected":"")" href="@Url.Action("Index", "Marketplace")">
-           <i class="fa-solid fa-store"></i>
-           marketplace
+       <a class="nav-item @((int)ViewData["nav-page"] == 2?"selected":"")" href="@Url.Action("Properties", "Server")">
+           <i class="fa-solid fa-rectangle-list"></i>
+           properties
        </a>
        <a class="nav-item @((int)ViewData["nav-page"] == 3?"selected":"")" href="@Url.Action("Index", "Settings")">
            <i class="fa-solid fa-gear"></i>

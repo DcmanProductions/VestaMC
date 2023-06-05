@@ -1,6 +1,3 @@
 [submodule "Server/wwwroot/libraries/fontawesome"]
 	path = Server/wwwroot/libraries/fontawesome
 	url = https://github.com/FortAwesome/Font-Awesome.git
-[submodule "Server/wwwroot/libraries/jquery"]
-	path = Server/wwwroot/libraries/jquery
-	url = https://github.com/jquery/jquery.git

@@ -1,23 +1,24 @@
 // LFInteractive LLC. - All Rights Reserved
-using Chase.WebDeploy.Core;
-using Chase.WebDeploy.Core.Controllers;
+using Chase.Vesta.Core;
+using Chase.Vesta.Core.Controllers;
 using Serilog;
 using Serilog.Events;
 
-namespace Chase.WebDeploy.Server;
+namespace Chase.Vesta.Server;
 
 public static class Application
 {
     private static readonly int PORT = ConfigurationController.Instance.Settings.Port;
 
-    private static void Main()
+    private static async Task Main()
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console(LogEventLevel.Information)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "debug.log"), LogEventLevel.Verbose, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "latest.log"), LogEventLevel.Information, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .CreateLogger();
-        Log.Information("Starting Kestral Template");
+        Log.Information("Starting {NAME}", Values.ApplicationName);
+
         Host.CreateDefaultBuilder()
             .UseSerilog()
             .ConfigureWebHostDefaults(builder =>
@@ -38,8 +39,6 @@ internal class Startup
 {
     public void Configure(IApplicationBuilder app, IWebHostEnvironment evn)
     {
-
-
         app.UseForwardedHeaders();
         app.UseStaticFiles();
         app.UseDefaultFiles();

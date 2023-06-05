@@ -1,28 +1,21 @@
 ﻿// LFInteractive LLC. - All Rights Reserved
-using Chase.WebDeploy.Core.Models;
+using Chase.Vesta.Core.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Chase.WebDeploy.Core.Controllers;
+namespace Chase.Vesta.Core.Controllers;
 
 public class ConfigurationController
 {
+    public static readonly ConfigurationController Instance = Instance ?? new();
+
+    public SettingsModel Settings { get; private set; }
+
     private ConfigurationController()
     {
-        Settings = new SettingsModel()
-        {
-            Port = 8256,
-            Authentication = new()
-            {
-                Username = "wdeploy",
-                Password = ""
-            }
-        };
+        Settings = new();
         Load();
     }
-
-    public static readonly ConfigurationController Instance = Instance ?? new();
-    public SettingsModel Settings { get; private set; }
 
     public void Load()
     {

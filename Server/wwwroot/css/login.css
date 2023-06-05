@@ -1,0 +1,26 @@
+﻿/* LFInteractive LLC. - All Rights Reserved */
+.panel {
+    width: calc(100% - 8rem);
+    height: 65vh;
+    min-height: 500px;
+}
+
+#form-data {
+    height: 100%;
+}
+
+    #form-data .col {
+        width: 100%;
+        margin: 0 2rem;
+    }
+
+    #form-data input {
+        margin-bottom: 2rem;
+    }
+
+main {
+    margin: auto;
+    width: 50%;
+    height: 50%;
+    max-height: 1080px;
+}
