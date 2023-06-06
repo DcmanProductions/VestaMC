@@ -28,7 +28,6 @@
                     <button id="minecraft-version-dropdown" class="dropdown" value="@Minecraft.Latest.Release">
                         <p class="value">Unkown</p>
                         <div class="dropdown-items">
-                            
                         @foreach(var item in Minecraft.Versions)
                         {
                             <div class="dropdown-item" value="@item.ID">@item.ID</div>
@@ -44,8 +43,8 @@
                             <div class="dropdown-item" value="vanilla">Vanilla</div>
                         </div>
                     </button>
-                    <label for="modloader-dropdown">Fabric</label>
-                    <button id="modloader-dropdown" class="dropdown" value="vanilla">
+                    <label for="modloader-version-dropdown"></label>
+                    <button id="modloader-version-dropdown" class="dropdown" value="vanilla">
                         <p class="value">Unkown</p>
                         <div class="dropdown-items">
                         </div>
@@ -60,3 +59,5 @@
             </div>
         </div>
 </div>
+
+<script src="/js/create-instance.js"></script>
