@@ -1,6 +1,13 @@
-﻿// LFInteractive LLC. - All Rights Reserved
-using Chase.Vesta.Core.Models;
-using Chase.Vesta.Core.Types;
+﻿/*
+VestaMC - LFInteractive LLC. (c) 2020-2024
+a minecraft server hosting platform for windows and linux
+https://github.com/dcmanproductions/VestaMC
+Licensed under the GNU General Public License v3.0
+https://www.gnu.org/licenses/lgpl-3.0.html
+*/
+
+using Chase.Vesta.Vesta.Models;
+using Chase.Vesta.Vesta.Types;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

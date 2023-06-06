@@ -1,4 +1,4 @@
-﻿﻿/*
+﻿/*
 VestaMC - LFInteractive LLC. (c) 2020-2024
 a minecraft server hosting platform for windows and linux
 https://github.com/dcmanproductions/VestaMC
@@ -6,9 +6,9 @@ Licensed under the GNU General Public License v3.0
 https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
-using Chase.Vesta.Core.Types;
+using Chase.Vesta.Vesta.Types;
 
-namespace Chase.Vesta.Core.Models;
+namespace Chase.Vesta.Vesta.Models;
 
 public struct ActivityModel
 {
