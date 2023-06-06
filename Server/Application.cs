@@ -1,4 +1,11 @@
-// LFInteractive LLC. - All Rights Reserved
+/*
+VestaMC - LFInteractive LLC. (c) 2020-2024
+a minecraft server hosting platform for windows and linux
+https://github.com/dcmanproductions/VestaMC
+Licensed under the GNU General Public License v3.0
+https://www.gnu.org/licenses/lgpl-3.0.html
+*/
+
 using Chase.Vesta.Core;
 using Chase.Vesta.Core.Controllers;
 using Serilog;
@@ -13,11 +20,19 @@ public static class Application
     private static async Task Main()
     {
         Log.Logger = new LoggerConfiguration()
-            .WriteTo.Console(LogEventLevel.Information)
+            .WriteTo.Console(LogEventLevel.Debug)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "debug.log"), LogEventLevel.Verbose, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "latest.log"), LogEventLevel.Information, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .CreateLogger();
         Log.Information("Starting {NAME}", Values.ApplicationName);
+        if (OperatingSystem.IsWindows())
+        {
+            if (!Environment.Is64BitOperatingSystem)
+            {
+                Log.Error("Windows ARM is not currently supported!");
+                return;
+            }
+        }
 
         Host.CreateDefaultBuilder()
             .UseSerilog()
