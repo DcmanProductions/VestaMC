@@ -1,10 +1,16 @@
 ﻿$(".dropdown-item").on('click', e => {
     let target = $(e.currentTarget);
-    target.addClass('selected');
     let dropdown = target.parent().parent()
+
+    dropdown.each((_, d) => {
+        d = $(d)
+        d.find('.dropdown-item.selected').removeClass('selected')
+    })
+
     dropdown.find('.value').html(target.html())
     dropdown.attr('value', target.attr('value'))
     dropdown.blur()
+    target.addClass('selected');
 })
 $(".dropdown").each((_, item) => {
     item = $(item)
