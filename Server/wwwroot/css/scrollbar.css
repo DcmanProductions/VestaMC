@@ -1,0 +1,29 @@
+﻿:root {
+    --scrollbar-width: 5px;
+    scroll-behavior: smooth;
+    scrollbar-width: var(--scrollbar-width);
+    scrollbar-color: var(--primary) transparent;
+}
+
+body {
+    overflow: overlay;
+}
+
+
+::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+
+::-webkit-scrollbar-thumb {
+    width: var(--scrollbar-width);
+    background: white;
+    border-radius: 100px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
