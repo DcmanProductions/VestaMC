@@ -1,18 +1,53 @@
-﻿<link rel="stylesheet" href="/css/create-instance.css">
+﻿@using Chase.Vesta.Java.Controllers;
+@using Chase.VestaMC.Minecraft.Controllers;
+@{
+    var Minecraft = MinecraftVersionController.GetMinecraftReleaseVersions().Result;
+
+}
+<link rel="stylesheet" href="/css/create-instance.css">
 <h1>Create Instance</h1>
 <div id="create-instance" class="col">
-        <h4>Instances</h4>
         <div class="panel col">
             <div id="form-data" class="row">
                 <div class="col">
                     <label for="instance-name">instance name</label>
-                    <input type="text" placeholder="site name" name="instance-name">
-                    <label for="domain-name">domain name</label>
-                    <input type="text" placeholder="site name" name="domain-name">
-                    <label for="server-name">server architecture</label>
-                    <button class="dropdown" value="default">
-                        <div class="dropdown-item" value="default">
-                            default
+                    <input type="text" placeholder="instance name" name="instance-name">
+                    <label for="java-dropdown">Java Version</label>
+                    <button id="java-dropdown"  class="dropdown" value="17">
+                        <p class="value">Unkown</p>
+                        <div class="dropdown-items">
+                        @foreach(var item in JavaController.GetJavaVersionManifests().Result)
+                        {
+                            <div class="dropdown-item" value="@item.Version">Java @item.Version</div>
+                        }
+                        </div>
+                    </button>
+                </div>
+                <div class="col">
+                    <label for="minecraft-version-dropdown">Minecraft</label>
+                    <button id="minecraft-version-dropdown" class="dropdown" value="@Minecraft.Latest.Release">
+                        <p class="value">Unkown</p>
+                        <div class="dropdown-items">
+                            
+                        @foreach(var item in Minecraft.Versions)
+                        {
+                            <div class="dropdown-item" value="@item.ID">@item.ID</div>
+                        }
+                        </div>
+                    </button>
+                    <label for="modloader-dropdown">Loader</label>
+                    <button id="modloader-dropdown" class="dropdown" value="vanilla">
+                        <p class="value">Unkown</p>
+                        <div class="dropdown-items">
+                            <div class="dropdown-item" value="fabric">Fabric</div>
+                            <div class="dropdown-item" value="forge">Forge</div>
+                            <div class="dropdown-item" value="vanilla">Vanilla</div>
+                        </div>
+                    </button>
+                    <label for="modloader-dropdown">Fabric</label>
+                    <button id="modloader-dropdown" class="dropdown" value="vanilla">
+                        <p class="value">Unkown</p>
+                        <div class="dropdown-items">
                         </div>
                     </button>
                 </div>
