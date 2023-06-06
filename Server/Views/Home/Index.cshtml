@@ -1,7 +1,9 @@
 ﻿@using Chase.Vesta.Core.Controllers;
 @using Chase.Vesta.Core.Models;
 @using Chase.Vesta.Core;
-@using Chase.Vesta.Core.Types;
+@using Chase.Vesta.Vesta.Models;
+@using Chase.Vesta.Vesta.Types;
+@using Chase.VestaMC.Vesta.Types;
 <link rel="stylesheet" href="/css//dashboard.css">
 <div class="col">
     <h1 id="welcome-header"><span>welcome, </span><span class="content">drew</span></h1>
@@ -11,14 +13,14 @@
                 <h4>instances</h4>
                 <div id="instances-actions" class="row">
                     <i id="filter-instances" class="fa-solid fa-arrow-down-wide-short filter"></i>
-                    <a class="button secondary" href="@Url.Action("CreateInstance", "Home")"><i class="fa fa-plus"></i></a>
+                    <a class="button secondary" href="@Url.Action("Create", "Instance")"><i class="fa fa-plus"></i></a>
                 </div>
             </div>
             <div class="panel">
                 <div id="instance-items" class="col">
                     @foreach(InstanceModel instance in InstanceController.Get())
                     {
-                    <a class="item row" title="View @instance.Name" href="@Url.Action("Instance", "Home", instance.Id)">
+                    <a class="item row" title="View @instance.Name" href="@Url.Action("Index", "Instance", instance.Id)">
                         <div class="col status @(instance.State==InstanceState.RUNNING?"success":instance.State == InstanceState.OFFLINE ? "error" : "warn")"></div>
                         <div class="col information">
                             <div class="status">@instance.Name</div>
