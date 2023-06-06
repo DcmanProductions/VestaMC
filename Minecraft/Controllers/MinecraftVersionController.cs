@@ -17,6 +17,11 @@ namespace Chase.VestaMC.Minecraft.Controllers;
 
 public static class MinecraftVersionController
 {
+    /// <summary>
+    /// Gets all minecraft version from mojang's server
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="NetworkInformationException">if mojang's servers are down or unresponsive</exception>
     public static async Task<MinecraftVersionListModel> GetMinecraftVersions()
     {
         Uri manifestUri = new("https://launchermeta.mojang.com/mc/game/version_manifest.json");
@@ -35,6 +40,11 @@ public static class MinecraftVersionController
         throw new NetworkInformationException((int)response.StatusCode);
     }
 
+    /// <summary>
+    /// Filters the versions from <seealso cref="GetMinecraftVersions">GetMinecraftVersion</seealso>
+    /// to only show releases
+    /// </summary>
+    /// <returns></returns>
     public static async Task<MinecraftVersionListModel> GetMinecraftReleaseVersions()
     {
         MinecraftVersionListModel versionListModel = await GetMinecraftVersions();
@@ -49,6 +59,11 @@ public static class MinecraftVersionController
         };
     }
 
+    /// <summary>
+    /// Filters the versions from <seealso cref="GetMinecraftVersions">GetMinecraftVersion</seealso>
+    /// to only show snapshots
+    /// </summary>
+    /// <returns></returns>
     public static async Task<MinecraftVersionListModel> GetMinecraftSnapshotVersions()
     {
         MinecraftVersionListModel versionListModel = await GetMinecraftVersions();
@@ -63,8 +78,20 @@ public static class MinecraftVersionController
         };
     }
 
+    /// <summary>
+    /// Gets a version based on the minecraft version id
+    /// </summary>
+    /// <param name="id">the minecraft version</param>
+    /// <returns></returns>
     public static async Task<MinecraftVersionModel> GetMinecraftVersionByID(string id) => (await GetMinecraftVersions()).Versions.First(i => i.ID == id);
 
+    /// <summary>
+    /// Downloads the minecraft server jar to the output directory and names it server.jar
+    /// </summary>
+    /// <param name="version">The minecraft version model</param>
+    /// <param name="outputDirectory">the output directory of the server.jar</param>
+    /// <param name="progressEvent">the download progress</param>
+    /// <returns></returns>
     public static async Task DownloadMinecraftServerJar(MinecraftVersionModel version, string outputDirectory, DownloadProgressEvent progressEvent)
     {
         using NetworkClient client = new();
