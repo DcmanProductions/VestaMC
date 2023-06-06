@@ -65,12 +65,12 @@ input, button.dropdown {
         -moz-appearance: textfield;
     }
 
-button.dropdown {
+.dropdown {
     position: relative;
     cursor: pointer;
 }
 
-    button.dropdown::after {
+    .dropdown::after {
         font-family: "Font Awesome 6 Free";
         content: '\f078';
         position: absolute;
@@ -80,3 +80,37 @@ button.dropdown {
         top: calc(50% - 1rem / 2);
         color: #535672;
     }
+
+    .dropdown .dropdown-items {
+        --height: 100px;
+        position: absolute;
+        bottom: calc((var(--height) + 20px) * -1);
+        height: var(--height);
+        overflow-y: scroll;
+        overflow-x: hidden;
+        background: #111322;
+        border-radius: 10px;
+        width: calc(100% - 2rem);
+        left: 0;
+        padding: .5rem 1rem;
+        display: none;
+        z-index: 99;
+    }
+
+    .dropdown:focus .dropdown-items {
+        display: unset;
+    }
+
+    .dropdown .dropdown-items .dropdown-item {
+        padding: 1rem;
+        border-radius: 10px;
+        margin-bottom: 5px;
+    }
+
+        .dropdown .dropdown-items .dropdown-item.selected {
+            background-color: #1A1D33;
+        }
+
+        .dropdown .dropdown-items .dropdown-item:hover {
+            background-color: #252A4A;
+        }
