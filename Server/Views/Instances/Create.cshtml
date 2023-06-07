@@ -3,6 +3,7 @@
 @using Chase.VestaMC.Modded.Data;
 @{
     var Minecraft = MinecraftVersionController.GetMinecraftReleaseVersions().Result;
+    string[] LocalJavaVersions = JavaController.GetLocallyInstalledJavaVersions();
 
 }
 <link rel="stylesheet" href="/css/create-instance.css">
@@ -17,6 +18,16 @@
                     <button id="java-dropdown"  class="dropdown" value="17">
                         <p class="value">Unkown</p>
                         <div class="dropdown-items">
+                            <div class="dropdown-item" value="custom">Custom Java Version</div>
+                        @if (LocalJavaVersions.Any())
+                        {
+                            <div class="dropdown-item no-select" value="custom">- Local -</div>
+                            @foreach(string version in LocalJavaVersions)
+                            {
+                                <div class="dropdown-item" value="@version">Java @version</div>
+                            }
+                            <div class="dropdown-item no-select" value="custom">- Remote -</div>
+                        }
                         @foreach(var item in JavaController.GetJavaVersionManifests().Result)
                         {
                             <div class="dropdown-item" value="@item.Version">Java @item.Version</div>
@@ -60,6 +71,12 @@
                 </div>
             </div>
         </div>
+</div>
+
+<div class="install-popup">
+    <p class="status">Installing<br/>Minecraft</p>
+    <p class="extra">28%</p>
+    <span class="spinner" progress="15"></span>
 </div>
 
 <script src="/js/create-instance.js"></script>
