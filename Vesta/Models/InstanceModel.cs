@@ -7,17 +7,21 @@ https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
 using Chase.Vesta.Java.Models;
+using Chase.VestaMC.Modded.Data;
 using Chase.VestaMC.Vesta.Types;
 
 namespace Chase.Vesta.Vesta.Models;
 
 public struct InstanceModel
 {
-    public Guid Id { get; } = Guid.NewGuid();
-    public string Name { get; set; } = "";
-    public InstanceState State { get; set; }
-    public string StartingExecutable { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public required string Name { get; set; }
+    public InstanceState State { get; set; } = InstanceState.OFFLINE;
+    public string? StartingExecutable { get; set; } = null;
     public JavaInstanceSettingsModel JavaSettings { get; set; } = new();
+    public SupportedModloaders ModLoader { get; set; } = SupportedModloaders.Vanilla;
+    public string? ModLoaderVersion { get; set; } = null;
+    public required string MinecraftVersion { get; set; }
 
     public InstanceModel()
     {
