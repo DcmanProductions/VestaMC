@@ -11,6 +11,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj" />
     <ProjectReference Include="..\Java\Java.csproj" />
+    <ProjectReference Include="..\Minecraft\Minecraft.csproj" />
+    <ProjectReference Include="..\Modded\Modded.csproj" />
   </ItemGroup>
 
 </Project>
