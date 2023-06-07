@@ -1,5 +1,6 @@
 ﻿@using Chase.Vesta.Java.Controllers;
 @using Chase.VestaMC.Minecraft.Controllers;
+@using Chase.VestaMC.Modded.Data;
 @{
     var Minecraft = MinecraftVersionController.GetMinecraftReleaseVersions().Result;
 
@@ -38,14 +39,15 @@
                     <button id="modloader-dropdown" class="dropdown" value="vanilla">
                         <p class="value">Unkown</p>
                         <div class="dropdown-items">
-                            <div class="dropdown-item" value="fabric">Fabric</div>
-                            <div class="dropdown-item" value="forge">Forge</div>
-                            <div class="dropdown-item" value="vanilla">Vanilla</div>
+                        @foreach(string item in Enum.GetNames(typeof(SupportedModloaders)))
+                        {
+                            <div class="dropdown-item" value="@item.ToLower()">@item</div>
+                        }
                         </div>
                     </button>
                     <label for="modloader-version-dropdown"></label>
-                    <button id="modloader-version-dropdown" class="dropdown" value="vanilla">
-                        <p class="value">Unkown</p>
+                    <button id="modloader-version-dropdown" class="dropdown">
+                        <p class="value">Loader Version</p>
                         <div class="dropdown-items">
                         </div>
                     </button>
