@@ -16,6 +16,8 @@ public static class FabricVersionController
 {
     public static readonly Uri FabricMavenUrl = new("https://maven.fabricmc.net/net/fabricmc/fabric-loader/");
 
+    public static async Task<LoaderVersion> GetFabricLoaderByID(string id) => (await GetFabricLoaderVersions()).First(i => i.Version == id);
+
     public static async Task<LoaderVersion[]> GetFabricLoaderVersions()
     {
         List<LoaderVersion> versions = new();
@@ -53,13 +55,16 @@ public static class FabricVersionController
                                 {
                                     extra = "." + versionParts[3].Trim();
                                 }
-                                versions.Add(new LoaderVersion()
+                                LoaderVersion loaderVersion = new LoaderVersion()
                                 {
                                     Major = Major,
                                     Minor = Minor,
                                     Patch = Patch,
-                                    Build = extra
-                                });
+                                    Build = extra,
+                                    MinecraftVersion = null
+                                };
+                                loaderVersion.DownloadUri = new($"{FabricVersionController.FabricMavenUrl}{loaderVersion.Version}/fabric-loader-{loaderVersion.Version}.jar");
+                                versions.Add(loaderVersion);
                             }
                             catch (FormatException e)
                             {
