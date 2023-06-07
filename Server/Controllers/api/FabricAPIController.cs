@@ -6,7 +6,6 @@ Licensed under the GNU General Public License v3.0
 https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
-using Chase.VestaMC.Minecraft.Controllers;
 using Chase.VestaMC.Modded.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,21 +22,9 @@ public class FabricAPIController : ControllerBase
         return Ok(await FabricVersionController.GetFabricLoaderVersions());
     }
 
-    [HttpGet("versions/release")]
-    public async Task<IActionResult> GetMinecraftReleaseVersions()
-    {
-        return Ok(await MinecraftVersionController.GetMinecraftReleaseVersions());
-    }
-
-    [HttpGet("versions/snapshot")]
-    public async Task<IActionResult> GetMinecraftSnapshotVersions()
-    {
-        return Ok(await MinecraftVersionController.GetMinecraftSnapshotVersions());
-    }
-
     [HttpGet("version/{ID}")]
-    public async Task<IActionResult> GetMinecraftVersionByID(string id)
+    public async Task<IActionResult> GetFabricVersionByID([FromRoute] string id)
     {
-        return Ok(await MinecraftVersionController.GetMinecraftVersionByID(id));
+        return Ok(await FabricVersionController.GetFabricLoaderByID(id));
     }
 }
