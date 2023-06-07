@@ -12,7 +12,7 @@ namespace Chase.Vesta.Java.Models;
 
 public struct JavaVersionManifest
 {
-    public int Version { get; set; }
+    public string Version { get; set; }
     public Uri PageUri { get; set; }
     public Uri DirectDownloadUri { get; set; }
 

@@ -7,6 +7,7 @@ https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
 using Chase.Networking.Event;
+using Chase.Vesta.Core;
 using Chase.Vesta.Java.Controllers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,7 @@ namespace Chase.VestaMC.Server.Controllers.api;
 [Route("/api/java")]
 public class JavaAPIController : ControllerBase
 {
-    private static Dictionary<int, DownloadProgressEventArgs> currentDownloadingProcesses = new();
+    private static Dictionary<string, DownloadProgressEventArgs> currentDownloadingProcesses = new();
 
     [HttpGet("versions")]
     public async Task<IActionResult> GetVersions()
@@ -32,7 +33,7 @@ public class JavaAPIController : ControllerBase
     }
 
     [HttpGet("download/{version}")]
-    public async Task<IActionResult> DownloadJavaVersion(int version)
+    public async Task<IActionResult> DownloadJavaVersion(string version)
     {
         var manifests = await JavaController.GetJavaVersionManifests();
         await JavaController.InstallVersion(manifests.First(i => i.Version == version), (s, e) =>
@@ -43,7 +44,7 @@ public class JavaAPIController : ControllerBase
     }
 
     [HttpDelete("{version}")]
-    public IActionResult DeleteVersion(int version)
+    public IActionResult DeleteVersion(string version)
     {
         if (JavaController.IsJavaVersionInstalled(version))
         {
@@ -54,12 +55,27 @@ public class JavaAPIController : ControllerBase
     }
 
     [HttpGet("download/{version}/poll")]
-    public IActionResult PollVersionProgress(int version)
+    public IActionResult PollVersionProgress(string version)
     {
         if (currentDownloadingProcesses.TryGetValue(version, out var progress))
         {
             return Ok(progress);
         }
         return BadRequest(new { error = $"There is no download process for Java {version}" });
+    }
+
+    [HttpPost("upload")]
+    public IActionResult UploadVersion([FromForm] IFormFile file)
+    {
+        string archive = Path.Combine(Values.Directories.TEMP, file.Name);
+        using (FileStream fs = new(archive, FileMode.Create, FileAccess.Write, FileShare.None))
+        {
+            file.CopyTo(fs);
+        }
+
+        FileInfo info = new(archive);
+        string version = info.Name.Replace(info.Extension, "");
+        JavaController.InstallLocalVersion(archive, JavaController.GetLocallyInstalledJavaVersion(version), version);
+        return Ok();
     }
 }

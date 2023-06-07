@@ -10,7 +10,7 @@ namespace Chase.Vesta.Java.Models;
 
 public struct JavaInstanceSettingsModel
 {
-    public int JavaVersion { get; set; } = 17;
+    public string JavaVersion { get; set; } = "17";
 
     public string JavaArguments { get; set; } = "";
 

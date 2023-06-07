@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SharpCompress.Readers;
+using System;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 
@@ -22,11 +23,15 @@ namespace Chase.Vesta.Java.Controllers;
 
 public static class JavaController
 {
-    public static string GetLocallyInstalledJavaVersion(int version) => Path.Combine(Values.Directories.Java, version.ToString());
+    public static string GetLocallyInstalledJavaVersion(string version) => Path.Combine(Values.Directories.Java, version);
 
-    public static bool IsJavaVersionInstalled(int version) => Directory.Exists(GetLocallyInstalledJavaVersion(version));
+    public static bool IsJavaVersionInstalled(string version) => Directory.Exists(GetLocallyInstalledJavaVersion(version));
 
-    public static string? GetVersionExecutable(int version) => IsJavaVersionInstalled(version) ? Path.Combine(Values.Directories.Java, version.ToString(), "bin", OperatingSystem.IsWindows() ? "java.exe" : "java") : null;
+    public static string? GetVersionExecutable(string version) => IsJavaVersionInstalled(version) ? Path.Combine(Values.Directories.Java, version.ToString(), "bin", OperatingSystem.IsWindows() ? "java.exe" : "java") : null;
+
+    public static async Task<JavaVersionManifest> GetRemoteJavaVersion(string version) => (await GetJavaVersionManifests()).First(s => s.Version == version);
+
+    public static async Task<bool> DoesRemoteJavaVersionExist(string version) => (await GetJavaVersionManifests()).Any(s => s.Version == version);
 
     public static async Task InstallVersion(JavaVersionManifest version, DownloadProgressEvent progress)
     {
@@ -48,14 +53,19 @@ public static class JavaController
             }
         }
         string output = GetLocallyInstalledJavaVersion(version.Version);
+        InstallLocalVersion(archiveFile, output, version.Version);
+    }
+
+    public static void InstallLocalVersion(string archiveFile, string output, string version)
+    {
         Log.Debug("Extracting '{file}'", archiveFile);
         if (archiveFile.EndsWith("tar.gz"))
         {
-            ExtractTarGz(archiveFile, output, version.Version);
+            ExtractTarGz(archiveFile, output, version);
         }
         else if (archiveFile.EndsWith("zip"))
         {
-            ExtractZip(archiveFile, output, version.Version);
+            ExtractZip(archiveFile, output, version);
         }
         File.Delete(archiveFile);
     }
@@ -105,7 +115,7 @@ public static class JavaController
                                 {
                                     versions.Add(new()
                                     {
-                                        Version = version,
+                                        Version = version.ToString(),
                                         PageUri = pageUri,
                                         DirectDownloadUri = direct
                                     });
@@ -141,7 +151,7 @@ public static class JavaController
                                 {
                                     if (int.TryParse(link.InnerText.Split(" ").Last(), out int version))
                                     {
-                                        if (!versions.Any(x => x.Version == version))
+                                        if (!versions.Any(x => x.Version == version.ToString()))
                                         {
                                             Uri pageUri = new($"https://jdk.java.net/java-se-ri/{version}{(version == 8 ? "-MR5" : "")}");
                                             Uri? direct = await GetJavaDirectDownloadLinkFromOpenJDK(version, pageUri);
@@ -149,7 +159,7 @@ public static class JavaController
                                             {
                                                 versions.Add(new()
                                                 {
-                                                    Version = version,
+                                                    Version = version.ToString(),
                                                     PageUri = pageUri,
                                                     DirectDownloadUri = direct
                                                 });
@@ -169,19 +179,16 @@ public static class JavaController
         return versions.ToArray();
     }
 
-    public static int[] GetLocallyInstalledJavaVersions()
+    public static string[] GetLocallyInstalledJavaVersions()
     {
-        List<int> versions = new();
+        List<string> versions = new();
         string[] entries = Directory.GetFileSystemEntries(Values.Directories.Java, "*", SearchOption.TopDirectoryOnly);
         foreach (string entry in entries)
         {
             FileInfo info = new(entry);
             if (info.Attributes.HasFlag(FileAttributes.Directory))
             {
-                if (int.TryParse(info.Name, out int version))
-                {
-                    versions.Add(version);
-                }
+                versions.Add(info.Name);
             }
         }
 
@@ -276,14 +283,14 @@ public static class JavaController
         return null;
     }
 
-    private static void ExtractZip(string archive, string output, int version)
+    private static void ExtractZip(string archive, string output, string version)
     {
-        using ZipArchive zip = new(File.OpenRead(archive)); string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version.ToString())).FullName;
+        using ZipArchive zip = new(File.OpenRead(archive)); string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version)).FullName;
         zip.ExtractToDirectory(tmp);
         CleanUpInstallation(tmp, output);
     }
 
-    private static void ExtractTarGz(string archive, string output, int version)
+    private static void ExtractTarGz(string archive, string output, string version)
     {
         using GZipStream gzip = new(File.OpenRead(archive), CompressionMode.Decompress);
         const int chunk = 4096;
@@ -296,7 +303,7 @@ public static class JavaController
             ms.Write(buffer, 0, read);
         } while (read == chunk);
         ms.Seek(0, SeekOrigin.Begin);
-        string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version.ToString())).FullName;
+        string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version)).FullName;
 
         using FileStream fs = File.OpenRead(archive);
 
