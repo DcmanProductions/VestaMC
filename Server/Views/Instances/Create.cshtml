@@ -12,7 +12,7 @@
             <div id="form-data" class="row">
                 <div class="col">
                     <label for="instance-name">instance name</label>
-                    <input type="text" placeholder="instance name" name="instance-name">
+                    <input id="instance-name" type="text" placeholder="instance name" name="instance-name">
                     <label for="java-dropdown">Java Version</label>
                     <button id="java-dropdown"  class="dropdown" value="17">
                         <p class="value">Unkown</p>
@@ -45,8 +45,8 @@
                         }
                         </div>
                     </button>
-                    <label for="modloader-version-dropdown"></label>
-                    <button id="modloader-version-dropdown" class="dropdown">
+                    <label for="modloader-version-dropdown" style="display:none"></label>
+                    <button id="modloader-version-dropdown" style="display:none" class="dropdown">
                         <p class="value">Loader Version</p>
                         <div class="dropdown-items">
                         </div>
