@@ -8,6 +8,7 @@ $(".dropdown").each((_, item) => {
 
 function RegisterDropdownItemClickEvent(dropdownItem) {
     dropdownItem = $(dropdownItem)
+    if (dropdownItem.hasClass('no-select')) return;
     let dropdown = dropdownItem.parent().parent()
 
     dropdown.each((_, d) => {
