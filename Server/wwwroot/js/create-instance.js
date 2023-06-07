@@ -1,10 +1,10 @@
-﻿
-let options = {
+﻿let options = {
     instanceName: $("#instance-name").val(),
     javaVersion: $("#java-dropdown").attr('value'),
     minecraftVersion: $("#minecraft-version-dropdown").attr('value'),
     modloader: $("#modloader-dropdown").attr('value'),
     modloaderVersion: "",
+    javaArchive: null,
 }
 
 $("#instance-name").on('keyup', e => options.instanceName = $(e.currentTarget).val())
@@ -14,7 +14,22 @@ $("#minecraft-version-dropdown").on('change', e => {
     if (options.modloader == "forge")
         loadModded(options.modloader);
 })
-$("#java-dropdown").on('change', e => options.javaVersion = $(e.currentTarget).attr('value'))
+$("#java-dropdown").on('change', e => {
+    let version = $(e.currentTarget).attr('value');
+    if (version == "custom") {
+        let input = document.createElement("input");
+        input.type = "file";
+        input.accept = "application/zip, application/gzip, .tar.gz"
+        input.addEventListener('change', () => {
+            if (input.files.length != 0) {
+                javaArchive = input.files[0];
+            }
+        })
+        input.click();
+    } else {
+        options.javaVersion = version
+    }
+})
 
 async function loadModded(loader) {
     options.modloader = loader;
