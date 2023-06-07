@@ -6,8 +6,13 @@ Licensed under the GNU General Public License v3.0
 https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
+using Chase.Vesta.Java.Controllers;
 using Chase.Vesta.Vesta.Models;
 using Chase.Vesta.Vesta.Types;
+using Chase.VestaMC.Minecraft.Controllers;
+using Chase.VestaMC.Modded.Controllers;
+using Chase.VestaMC.Modded.Data;
+using Chase.VestaMC.Vesta.Events;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -28,7 +33,7 @@ public class InstanceController
         LoadManifest();
     }
 
-    public static void AddOrUpdate(InstanceModel model)
+    public static bool TryAdd(InstanceModel model)
     {
         if (Instance.Instances.TryAdd(model.Id, model))
         {
@@ -38,6 +43,8 @@ public class InstanceController
                 Type = ActivityType.CREATE,
                 Details = $"Instance '{model.Name}' was created!"
             });
+            Instance.SaveManifest();
+            return true;
         }
         else
         {
@@ -47,7 +54,117 @@ public class InstanceController
                 Type = ActivityType.FAILED_TO_CREATE,
                 Details = $"Instance '{model.Name}' failed to be created!"
             });
+            return false;
         }
+    }
+
+    public static async Task InstallInstance(InstanceModel instance, EventHandler<InstallingInstanceEventArgs> progressEvent)
+    {
+        string instanceDirectory = Directory.CreateDirectory(Path.Combine(Values.Directories.Instances, instance.Id.ToString())).FullName;
+
+        if (!JavaController.IsJavaVersionInstalled(instance.JavaSettings.JavaVersion))
+        {
+            if (await JavaController.DoesRemoteJavaVersionExist(instance.JavaSettings.JavaVersion))
+            {
+                await JavaController.InstallVersion(await JavaController.GetRemoteJavaVersion(instance.JavaSettings.JavaVersion), (s, e) =>
+                {
+                    progressEvent.Invoke(null, new()
+                    {
+                        DownloadProgress = e,
+                        Stage = $"Downloading Java {instance.JavaSettings.JavaVersion}"
+                    });
+                });
+            }
+            else
+            {
+                progressEvent.Invoke(null, new()
+                {
+                    Stage = $"Java {instance.JavaSettings.JavaVersion} not Found!"
+                });
+            }
+        }
+
+        await MinecraftVersionController.DownloadMinecraftServerJar(await MinecraftVersionController.GetMinecraftVersionByID(instance.MinecraftVersion), instanceDirectory, (s, e) =>
+        {
+            progressEvent.Invoke(null, new()
+            {
+                DownloadProgress = e,
+                Stage = "Downloading Minecraft Server"
+            });
+        });
+        switch (instance.ModLoader)
+        {
+            case SupportedModloaders.Vanilla:
+                Instance.Instances[instance.Id] = new()
+                {
+                    Id = instance.Id,
+                    MinecraftVersion = instance.MinecraftVersion,
+                    Name = instance.Name,
+                    JavaSettings = instance.JavaSettings,
+                    ModLoader = instance.ModLoader,
+                    ModLoaderVersion = instance.ModLoaderVersion,
+                    State = instance.State,
+                    StartingExecutable = "server.jar"
+                };
+                break;
+
+            case SupportedModloaders.Forge:
+                if (instance.ModLoaderVersion != null)
+                {
+                    await ForgeVersionController.DownloadForgeServerJar(instanceDirectory, instance.MinecraftVersion, instance.ModLoaderVersion, (s, e) =>
+                    {
+                        progressEvent.Invoke(null, new()
+                        {
+                            DownloadProgress = e,
+                            Stage = "Downloading Forge Server"
+                        });
+                    });
+                    Instance.Instances[instance.Id] = new()
+                    {
+                        Id = instance.Id,
+                        MinecraftVersion = instance.MinecraftVersion,
+                        Name = instance.Name,
+                        JavaSettings = instance.JavaSettings,
+                        ModLoader = instance.ModLoader,
+                        ModLoaderVersion = instance.ModLoaderVersion,
+                        State = instance.State,
+                        StartingExecutable = null
+                    };
+
+                    progressEvent.Invoke(null, new()
+                    {
+                        Stage = "Installing Forge Server"
+                    });
+                }
+
+                break;
+
+            case SupportedModloaders.Fabric:
+                if (instance.ModLoaderVersion != null)
+                {
+                    await FabricVersionController.DownloadFabricServerJar(instanceDirectory, instance.ModLoaderVersion, (s, e) =>
+                    {
+                        progressEvent.Invoke(null, new()
+                        {
+                            DownloadProgress = e,
+                            Stage = "Downloading Fabric Server"
+                        });
+                    });
+                    Instance.Instances[instance.Id] = new()
+                    {
+                        Id = instance.Id,
+                        MinecraftVersion = instance.MinecraftVersion,
+                        Name = instance.Name,
+                        JavaSettings = instance.JavaSettings,
+                        ModLoader = instance.ModLoader,
+                        ModLoaderVersion = instance.ModLoaderVersion,
+                        State = instance.State,
+                        StartingExecutable = "fabric-server.jar"
+                    };
+                }
+                break;
+        }
+
         Instance.SaveManifest();
     }
 
