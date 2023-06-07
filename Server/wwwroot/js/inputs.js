@@ -19,4 +19,5 @@ function RegisterDropdownItemClickEvent(dropdownItem) {
     dropdown.attr('value', dropdownItem.attr('value'))
     dropdown.blur()
     dropdownItem.addClass('selected');
+    dropdown.trigger('change');
 }
