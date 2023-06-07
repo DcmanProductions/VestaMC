@@ -6,6 +6,8 @@ Licensed under the GNU General Public License v3.0
 https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
+using Chase.Networking;
+using Chase.Networking.Event;
 using Chase.VestaMC.Modded.Models;
 using HtmlAgilityPack;
 using Serilog;
@@ -15,6 +17,13 @@ namespace Chase.VestaMC.Modded.Controllers;
 public static class FabricVersionController
 {
     public static readonly Uri FabricMavenUrl = new("https://maven.fabricmc.net/net/fabricmc/fabric-loader/");
+
+    public static async Task DownloadFabricServerJar(string outputDirectory, string modLoaderVersion, DownloadProgressEvent progressEvent)
+    {
+        using NetworkClient client = new();
+        Uri downloadUri = (await GetFabricLoaderByID(modLoaderVersion)).DownloadUri;
+        await client.DownloadFileAsync(downloadUri, Path.Combine(outputDirectory, "fabric-server.jar"), progressEvent);
+    }
 
     public static async Task<LoaderVersion> GetFabricLoaderByID(string id) => (await GetFabricLoaderVersions()).First(i => i.Version == id);
 

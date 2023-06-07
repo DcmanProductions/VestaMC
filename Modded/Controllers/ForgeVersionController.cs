@@ -6,6 +6,8 @@ Licensed under the GNU General Public License v3.0
 https://www.gnu.org/licenses/lgpl-3.0.html
 */
 
+using Chase.Networking;
+using Chase.Networking.Event;
 using Chase.VestaMC.Modded.Models;
 using HtmlAgilityPack;
 using Serilog;
@@ -14,8 +16,15 @@ namespace Chase.VestaMC.Modded.Controllers;
 
 public static class ForgeVersionController
 {
+    public static async Task DownloadForgeServerJar(string outputDirectory, string minecraftVersion, string fmlVersion, DownloadProgressEvent progressEvent)
+    {
+        using NetworkClient client = new();
+        Uri downloadUri = ForgeUniversalJarUri(minecraftVersion, fmlVersion);
+        await client.DownloadFileAsync(downloadUri, Path.Combine(outputDirectory, "forge-server-installer.jar"), progressEvent);
+    }
+
     public static Uri ForgeUniversalJarUri(string minecraftVersion, string fmlVersion) =>
-        new($"https://maven.minecraftforge.net/net/minecraftforge/forge/{minecraftVersion}-{fmlVersion}/forge-{minecraftVersion}-{fmlVersion}-universal.jar");
+        new($"https://maven.minecraftforge.net/net/minecraftforge/forge/{minecraftVersion}-{fmlVersion}/forge-{minecraftVersion}-{fmlVersion}-installer.jar");
 
     public static async Task<LoaderVersion> GetForgeLoaderVersionByID(string minecraftVersion, string fmlVersion) => (await GetForgeLoaderVersions(minecraftVersion)).First(i => i.Version == fmlVersion);
 
