@@ -1,21 +1,37 @@
-﻿let modloaderVersionCombo = $("#modloader-version-dropdown, label[for='modloader-version-dropdown']");
-let modloaderVersionLabel = $("label[for='modloader-version-dropdown']");
-modloaderVersionCombo.css('display', 'none');
-let modloaderVersionDropdown = $("#modloader-version-dropdown");
-let modloaderDropdown = $("#modloader-dropdown");
-modloaderDropdown.find(".dropdown-item").on('click', async e => await loadModded($(e.currentTarget).attr('value')));
-modloaderDropdown.find(".dropdown-item[value='vanilla']").on('click', () => modloaderVersionCombo.css('display', 'none'));
+﻿
+let options = {
+    instanceName: $("#instance-name").val(),
+    javaVersion: $("#java-dropdown").attr('value'),
+    minecraftVersion: $("#minecraft-version-dropdown").attr('value'),
+    modloader: $("#modloader-dropdown").attr('value'),
+    modloaderVersion: "",
+}
+
+$("#instance-name").on('keyup', e => options.instanceName = $(e.currentTarget).val())
+$("#modloader-dropdown").on('change', async e => await loadModded($(e.currentTarget).attr('value')))
+$("#minecraft-version-dropdown").on('change', e => {
+    options.minecraftVersion = $(e.currentTarget).attr('value');
+    if (options.modloader == "forge")
+        loadModded(options.modloader);
+})
+$("#java-dropdown").on('change', e => options.javaVersion = $(e.currentTarget).attr('value'))
 
 async function loadModded(loader) {
+    options.modloader = loader;
+    let modloaderVersionCombo = $("#modloader-version-dropdown, label[for='modloader-version-dropdown']");
     // If the loader is vanilla ignore it.
-    if (loader == "vanilla") return;
+    if (loader == "vanilla") {
+        modloaderVersionCombo.css('display', 'none');
+
+        return;
+    }
 
     // Set the dropdown and label to be visible
     modloaderVersionCombo.css('display', "")
-    modloaderVersionLabel.html(`${loader} loader`); // Set the label text
+    $("label[for='modloader-version-dropdown']").html(`${loader} loader`); // Set the label text
 
     // Make the call to the api
-    let response = await $.get(`/api/${loader}/versions`)
+    let response = await $.get(`/api/${loader}/versions${(loader == "forge" ? `?mc=${options.minecraftVersion}` : "")}`)
 
     // Loop through all json items and create html dropdown item.
     let items = "";
@@ -23,10 +39,15 @@ async function loadModded(loader) {
         items += `<div class="dropdown-item" value="${item.version}">${item.version}</div>`
     })
 
+    let modloaderVersionDropdown = $("#modloader-version-dropdown");
+
     // Insert html into the dropdown items
     modloaderVersionDropdown.find('.dropdown-items').html(items)
 
     // Regsister the click event for the dropdown items
-    modloaderVersionDropdown.find('.dropdown-item').on('click', e => RegisterDropdownItemClickEvent(e.currentTarget))
+    modloaderVersionDropdown.find('.dropdown-item').on('click', e => {
+        RegisterDropdownItemClickEvent(e.currentTarget)
+        options.modloaderVersion = $(e.currentTarget).attr('value')
+    })
     modloaderVersionDropdown.find('.dropdown-item')[0].click()
 }
