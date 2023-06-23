@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using SharpCompress.Readers;
-using System;
+using System.Diagnostics;
 using System.IO.Compression;
 using System.Text.RegularExpressions;
 
@@ -36,6 +36,13 @@ public static class JavaController
     public static async Task InstallVersion(JavaVersionManifest version, DownloadProgressEvent progress)
     {
         Log.Information("Installing Java Version {VERSION}", version);
+        string archiveFile = await DownloadJavaArchive(version, progress);
+        string output = GetLocallyInstalledJavaVersion(version.Version);
+        InstallLocalVersion(archiveFile, output, version.Version);
+    }
+
+    public static async Task<string> DownloadJavaArchive(JavaVersionManifest version, DownloadProgressEvent progress)
+    {
         string archiveFile = "";
         using (NetworkClient client = new())
         {
@@ -52,11 +59,10 @@ public static class JavaController
                 await client.DownloadFileAsync(directUri, archiveFile, progress);
             }
         }
-        string output = GetLocallyInstalledJavaVersion(version.Version);
-        InstallLocalVersion(archiveFile, output, version.Version);
+        return archiveFile;
     }
 
-    public static void InstallLocalVersion(string archiveFile, string output, string version)
+    public static void InstallLocalVersion(string archiveFile, string output, string version, bool cleanup = true)
     {
         Log.Debug("Extracting '{file}'", archiveFile);
         if (archiveFile.EndsWith("tar.gz"))
@@ -67,7 +73,54 @@ public static class JavaController
         {
             ExtractZip(archiveFile, output, version);
         }
-        File.Delete(archiveFile);
+        if (cleanup)
+            File.Delete(archiveFile);
+    }
+
+    public static bool ValidateJavaArchive(string archiveFile, out string version)
+    {
+        version = "";
+        string testDirectory = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, Path.GetRandomFileName())).FullName;
+        try
+        {
+            InstallLocalVersion(archiveFile, testDirectory, Guid.NewGuid().ToString(), false);
+        }
+        catch (Exception e)
+        {
+            Log.Error("Unable to Validate Java Archive: Unable to extract archive - {MSG}", e.Message, e);
+            return false;
+        }
+
+        string executable = Path.Combine(testDirectory, "bin", OperatingSystem.IsWindows() ? "java.exe" : "java");
+
+        Process process = new()
+        {
+            StartInfo = new()
+            {
+                FileName = executable,
+                Arguments = "-version",
+                RedirectStandardOutput = true,
+            },
+            EnableRaisingEvents = true,
+        };
+        process.Start();
+        process.WaitForExit();
+        string[] words = process.StandardOutput.ReadToEnd().Split('\n').First().Split(' ');
+        if (words.Length == 3)
+        {
+            version = words[2].Trim('"');
+            if (version.Contains('.'))
+            {
+                if (int.TryParse(version.First().ToString(), out int _))
+                {
+                    version = version.Split('.')[1].Trim();
+                    return true;
+                }
+            }
+            return true;
+        }
+
+        return false;
     }
 
     public static async Task<JavaVersionManifest[]> GetJavaVersionManifests(bool useCached = true)
@@ -285,7 +338,8 @@ public static class JavaController
 
     private static void ExtractZip(string archive, string output, string version)
     {
-        using ZipArchive zip = new(File.OpenRead(archive)); string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version)).FullName;
+        using ZipArchive zip = new(File.OpenRead(archive));
+        string tmp = Directory.CreateDirectory(Path.Combine(Values.Directories.TEMP, version)).FullName;
         zip.ExtractToDirectory(tmp);
         CleanUpInstallation(tmp, output);
     }
@@ -322,6 +376,7 @@ public static class JavaController
     {
         string primary = Directory.GetFileSystemEntries(extracted, "*", SearchOption.TopDirectoryOnly).First(i => new FileInfo(i).Attributes.HasFlag(FileAttributes.Directory));
 
+        if (Directory.Exists(output)) Directory.Delete(output, true);
         Directory.Move(primary, output);
         Directory.Delete(extracted, true);
     }
