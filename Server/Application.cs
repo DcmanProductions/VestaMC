@@ -8,6 +8,7 @@ https://www.gnu.org/licenses/lgpl-3.0.html
 
 using Chase.Vesta.Core;
 using Chase.Vesta.Core.Controllers;
+using Microsoft.AspNetCore.Http.Features;
 using Serilog;
 using Serilog.Events;
 
@@ -17,13 +18,18 @@ public static class Application
 {
     private static readonly int PORT = ConfigurationController.Instance.Settings.Port;
 
-    private static async Task Main()
+    private static void Main()
     {
         Log.Logger = new LoggerConfiguration()
             .WriteTo.Console(LogEventLevel.Debug)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "debug.log"), LogEventLevel.Verbose, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .WriteTo.File(Path.Combine(Values.Directories.Logs, "latest.log"), LogEventLevel.Information, buffered: true, rollingInterval: RollingInterval.Day, rollOnFileSizeLimit: true, fileSizeLimitBytes: 5_000_000)
             .CreateLogger();
+        try
+        {
+            Directory.Delete(Values.Directories.TEMP, true);
+        }
+        catch { }
         Log.Information("Starting {NAME}", Values.ApplicationName);
         if (OperatingSystem.IsWindows())
         {
@@ -42,6 +48,7 @@ public static class Application
                 builder.UseContentRoot(Directory.GetCurrentDirectory());
                 builder.UseKestrel(options =>
                 {
+                    options.Limits.MaxRequestBodySize = null;
                     options.ListenAnyIP(PORT);
                 });
                 builder.UseStartup<Startup>();
@@ -73,6 +80,11 @@ internal class Startup
         {
             action.IOTimeout = TimeSpan.FromSeconds(10);
             action.IdleTimeout = TimeSpan.FromSeconds(10);
+        });
+        service.Configure<FormOptions>(option =>
+        {
+            option.MultipartBodyLengthLimit = long.MaxValue;
+            option.ValueLengthLimit = int.MaxValue;
         });
     }
 }
