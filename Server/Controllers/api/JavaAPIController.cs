@@ -64,18 +64,20 @@ public class JavaAPIController : ControllerBase
         return BadRequest(new { error = $"There is no download process for Java {version}" });
     }
 
-    [HttpPost("upload")]
+    [HttpPost("upload"), DisableRequestSizeLimit]
     public IActionResult UploadVersion([FromForm] IFormFile file)
     {
-        string archive = Path.Combine(Values.Directories.TEMP, file.Name);
+        string archive = Path.Combine(Values.Directories.TEMP, file.FileName);
         using (FileStream fs = new(archive, FileMode.Create, FileAccess.Write, FileShare.None))
         {
             file.CopyTo(fs);
         }
 
-        FileInfo info = new(archive);
-        string version = info.Name.Replace(info.Extension, "");
-        JavaController.InstallLocalVersion(archive, JavaController.GetLocallyInstalledJavaVersion(version), version);
-        return Ok();
+        if (JavaController.ValidateJavaArchive(archive, out string version))
+        {
+            return Ok(new { version });
+            JavaController.InstallLocalVersion(archive, JavaController.GetLocallyInstalledJavaVersion(version), version);
+        }
+        return BadRequest(new { error = "Unable to validate java archive" });
     }
 }
